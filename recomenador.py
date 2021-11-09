@@ -72,7 +72,12 @@ class Recomanador:
     def simple_choice(self,data):
         queried_jocs = data.query('min <= @self.players & max >= @self.players & Duració <= (@self.temps + 15) & Duració >= (@self.temps - 15) & Profunditat >= @self.dif_min & Profunditat <= @self.dif_max ')
         while True:
-            pick = random.choice(list(queried_jocs['Nom del joc']))
+            try:
+                pick = random.choice(list(queried_jocs['Nom del joc']))
+            except:
+                print('no hi ha cap joc que cumpleixi els teus requisits\n')
+                print("et recomanaré un joc a l'atzar\n")
+                pick = random.choice(data['Nom del joc'])
             print(f' Perquè no jugueu a {pick} ?')
             agree = input("T'agrada aquesta opció? Y/N ")
             if agree.upper() == 'Y':
@@ -116,6 +121,7 @@ class JocDB:
         service = build('sheets', 'v4', credentials=creds)
 
         # Call the Sheets API
+        print('retrieving boardgame collection from google sheets...')
         sheet = service.spreadsheets()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME
