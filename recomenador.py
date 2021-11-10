@@ -9,6 +9,9 @@ from google.oauth2.credentials import Credentials
 import regex as re
 import pandas as pd
 import random
+import requests
+import urllib.request
+from IPython.display import Image
 
 
 class Recomanador:
@@ -79,6 +82,19 @@ class Recomanador:
                 print("et recomanaré un joc a l'atzar\n")
                 pick = random.choice(data['Nom del joc'])
             print(f' Perquè no jugueu a {pick} ?')
+            try:
+                image = requests.get(f'https://www.boardgamegeek.com/search/boardgame?q={pick}&nosession=1&showcount=20', headers = {'user-agent': '{Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36}'})
+                object_pattern = re.compile('/boardgame/([0-9]*)/')
+                object_id = object_pattern.findall(image.text)[0]
+                resp = requests.get(f'https://api.geekdo.com/api/images?ajax=1&gallery=all&nosession=1&objectid={object_id}&objecttype=thing&pageid=1&showcount=36&size=thumb&sort=hot')
+                image_url = resp.json()['images'][random.randint(0,10)]['imageurl_lg']
+            except:
+                print("No s'ha pogut trobar cap imatge del joc\n")
+            try:
+                display(Image(image_url))
+            except:
+                print(f'una imatge de mostra aqui: {image_url}')
+
             agree = input("T'agrada aquesta opció? Y/N ")
             if agree.upper() == 'Y':
                 break
