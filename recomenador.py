@@ -50,7 +50,7 @@ class Recomanador:
 
         if self.dificultat == 'F':
             self.dif_min = 0
-            self.dif_max = 2
+            self.dif_max = 2.5
         elif self.dificultat == 'M':
             self.dif_min = 2
             self.dif_max = 3.5
