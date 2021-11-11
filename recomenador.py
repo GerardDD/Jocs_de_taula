@@ -90,6 +90,7 @@ class Recomanador:
                 image_url = resp.json()['images'][random.randint(0,10)]['imageurl_lg']
             except:
                 print("No s'ha pogut trobar cap imatge del joc\n")
+                image_url = None
             try:
                 display(Image(image_url))
             except:
